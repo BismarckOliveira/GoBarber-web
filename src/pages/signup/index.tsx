@@ -1,25 +1,35 @@
 import React, { useCallback } from 'react';
-import { FiArrowLeft, FiMail, FiUser, FiLock } from 'react-icons/fi';
+import { FiArrowLeft, FiUser, FiMail, FiLock } from 'react-icons/fi';
 import { Form } from '@unform/web';
 import * as Yup from 'yup';
 
 import logoImg from '../../assets/logo.svg';
-import Button from '../../components/Button';
+
 import Input from '../../components/Input';
+import Button from '../../components/Button';
 
 import { Container, Content, Background } from './styles';
 
-const Signup: React.FC = () => {
-  const handleSubmit = useCallback(async (data: object) => {
+interface SignUpProps {
+  name: string;
+  email: string;
+  password: string;
+}
+
+const SignUp: React.FC = () => {
+  const handleSubmit = useCallback(async (data: SignUpProps) => {
     try {
       const schema = Yup.object().shape({
-        name: Yup.string().required('Nome é obrigatório'),
+        name: Yup.string().required('Nome obrigatório'),
         email: Yup.string()
-          .required('E-mail é obrigatorio')
-          .email('Digite um e-mail valido'),
-        password: Yup.string().min(6, 'No minimo 6 dígitos'),
+          .email('Digite um e-mail válido')
+          .required('E-mail obrigatório'),
+        password: Yup.string().min(6, 'No mínimo 6 dígitos'),
       });
-      await schema.validate(data);
+
+      await schema.validate(data, {
+        abortEarly: false,
+      });
     } catch (err) {
       console.log(err);
     }
@@ -30,11 +40,14 @@ const Signup: React.FC = () => {
       <Background />
       <Content>
         <img src={logoImg} alt="GoBarber" />
-        <Form onSubmit={handleSubmit}>
-          <h1>Faça seu Cadastro</h1>
 
-          <Input name="name" icon={FiUser} placeholder="Nome" />
-          <Input name="Email" icon={FiMail} placeholder="E-mail" />
+        <Form onSubmit={handleSubmit}>
+          <h1>Faça seu cadastro</h1>
+
+          <Input name="name" icon={FiUser} placeholder="E-mail" />
+
+          <Input name="email" icon={FiMail} placeholder="E-mail" />
+
           <Input
             name="password"
             icon={FiLock}
@@ -44,13 +57,14 @@ const Signup: React.FC = () => {
 
           <Button type="submit">Cadastrar</Button>
         </Form>
-        <a href="login">
+
+        <a href="signup">
           <FiArrowLeft />
-          Voltar para o logon
+          Voltar para logon
         </a>
       </Content>
     </Container>
   );
 };
 
-export default Signup;
+export default SignUp;
