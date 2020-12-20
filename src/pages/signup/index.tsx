@@ -10,19 +10,15 @@ import Input from '../../components/Input';
 import { Container, Content, Background } from './styles';
 
 const Signup: React.FC = () => {
-  const handleSubmit = useCallback(async (data: object) => {
-    try {
-      const schema = Yup.object().shape({
-        name: Yup.string().required('Nome é obrigatório'),
-        email: Yup.string()
-          .required('E-mail é obrigatorio')
-          .email('Digite um e-mail valido'),
-        password: Yup.string().min(6, 'No minimo 6 dígitos'),
-      });
-      await schema.validate(data);
-    } catch (err) {
-      console.log(err);
-    }
+  const handleSubmit = useCallback(async data => {
+    const schema = Yup.object().shape({
+      name: Yup.string().required('Nome é obrigatório'),
+      email: Yup.string()
+        .required('E-mail é obrigatorio')
+        .email('Digite um e-mail valido'),
+      password: Yup.string().min(6, 'No minimo 6 dígitos'),
+    });
+    await schema.validate(data);
   }, []);
 
   return (
