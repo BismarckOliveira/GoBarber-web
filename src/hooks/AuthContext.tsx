@@ -3,7 +3,7 @@ import api from '../services/api';
 
 interface AuthState {
   token: string;
-  user: object;
+  userWithoutPassword: object;
 }
 
 interface SignInCredentials {
@@ -12,7 +12,7 @@ interface SignInCredentials {
 }
 
 interface AuthContextData {
-  user: object;
+  userWithoutPassword: object;
   signIn(credentials: SignInCredentials): Promise<void>;
   signOut(): void;
 }
@@ -22,10 +22,13 @@ const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 const AuthProvider: React.FC = ({ children }) => {
   const [data, setData] = useState<AuthState>(() => {
     const token = localStorage.getItem('@GoBarber:token');
-    const user = localStorage.getItem('@GoBarber:user');
+    const userWithoutPassword = localStorage.getItem('@GoBarber:user');
 
-    if (token && user) {
-      return { token, user: JSON.parse(user) };
+    if (token && userWithoutPassword) {
+      return {
+        token,
+        userWithoutPassword: JSON.parse(userWithoutPassword),
+      };
     }
 
     return {} as AuthState;
@@ -37,12 +40,12 @@ const AuthProvider: React.FC = ({ children }) => {
       password,
     });
 
-    const { token, user } = response.data;
+    const { token, userWithoutPassword } = response.data;
 
     localStorage.setItem('@GoBarber:token', token);
-    localStorage.setItem('@GoBarber:user', JSON.stringify(user));
+    localStorage.setItem('@GoBarber:user', JSON.stringify(userWithoutPassword));
 
-    setData({ token, user });
+    setData({ token, userWithoutPassword });
   }, []);
 
   const signOut = useCallback(() => {
@@ -53,7 +56,9 @@ const AuthProvider: React.FC = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user: data.user, signIn, signOut }}>
+    <AuthContext.Provider
+      value={{ userWithoutPassword: data.userWithoutPassword, signIn, signOut }}
+    >
       {children}
     </AuthContext.Provider>
   );
