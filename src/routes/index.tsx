@@ -7,12 +7,15 @@ import Route from './Route';
 
 import Dashboard from '../pages/Dashboard';
 import FogotPassword from '../pages/FogotPassword';
+import ResetPassword from '../pages/ResetPassword';
 
 const Routes: React.FC = () => (
   <Switch>
     <Route path="/" exact component={SignIn} />
     <Route path="/signup" component={SignUp} />
     <Route path="/forgot-password" component={FogotPassword} />
+    <Route path="/reset-password" component={ResetPassword} />
+
     <Route path="/dashboard" component={Dashboard} isPrivate />
   </Switch>
 );
