@@ -6,12 +6,13 @@ import SignUp from '../pages/signup';
 import Route from './Route';
 
 import Dashboard from '../pages/Dashboard';
+import FogotPassword from '../pages/FogotPassword';
 
 const Routes: React.FC = () => (
   <Switch>
     <Route path="/" exact component={SignIn} />
     <Route path="/signup" component={SignUp} />
-
+    <Route path="/forgot-password" component={FogotPassword} />
     <Route path="/dashboard" component={Dashboard} isPrivate />
   </Switch>
 );
